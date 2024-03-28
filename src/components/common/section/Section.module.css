@@ -6,5 +6,6 @@
 .title {
   font-size: 28px;
   font-weight: 400;
-  padding-left: 25px;
+  padding: 20px 25px;
+  margin: 0;
 }

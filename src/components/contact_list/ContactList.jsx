@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import styles from './ContactList.module.css';
 import { Button } from 'components/common/button/Button';
+import { useState } from 'react';
 
 export const ContactList = ({ contacts, onClick }) => {
   return (
@@ -9,10 +10,13 @@ export const ContactList = ({ contacts, onClick }) => {
         {contacts.map(contact => {
           return (
             <li key={contact.id} id={contact.id} className={styles.contact}>
-              <div className={styles.container}>
-                <span className={styles.name}>
-                  {`${contact.name}: `}
-                  <span className={styles.number}>{contact.number}</span>
+              <div className={styles.contactContainer}>
+                <span className={styles.id}>
+                  {`${contacts.indexOf(contact) + 1}.`}
+                  <span className={styles.name}>
+                    {`${contact.name}:`}
+                    <span className={styles.number}>{contact.number}</span>
+                  </span>
                 </span>
                 <Button onClick={onClick}>Delete</Button>
               </div>

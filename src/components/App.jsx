@@ -47,15 +47,15 @@ const App = () => {
       const isAlreadyAdded = contactsName.includes(name);
       // console.log(isAlreadyAdded);
       if (isAlreadyAdded) {
-        window.alert(`${name} is already in contacts.`);
+        window.alert(`${name} is already in contacts`);
         return;
       }
     }
 
     if (name !== '' && number !== '') {
-      const newId = nanoid();
+      const id = nanoid();
       const contact = {
-        id: newId,
+        id,
         name,
         number,
       };
