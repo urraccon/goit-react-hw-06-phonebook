@@ -10,17 +10,13 @@ const CONTACTS_KEY = 'contacts';
 
 const App = () => {
   const [contacts, setContacts] = useState([]);
-  const [contactsCopy, setContactsCopy] = useState([]);
   const [filter, setFilter] = useState('');
-  const [isFirstMouting, setIsFirstMouting] = useState(false);
 
   useEffect(() => {
-    if (isFirstMouting) {
+    if (contacts.length > 0) {
       localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts));
-    } else {
-      setIsFirstMouting(true);
     }
-  }, [contacts, isFirstMouting]);
+  }, [contacts]);
 
   useEffect(() => {
     async function getContacts() {
@@ -28,24 +24,22 @@ const App = () => {
 
       if (data) {
         setContacts(JSON.parse(data));
-        setContactsCopy(JSON.parse(data));
       }
     }
+
     getContacts().catch(err => {
-      console.log(`error: ${err}`);
+      console.log(err);
+      window.alert(err.message);
     });
   }, []);
 
   const addContact = form => {
-    // debugger;
-    // console.log(form);
     const { name, number } = form;
 
     if (contacts.length > 0) {
       const contactsName = contacts.map(contact => contact.name);
-      // console.log(contactsName);
       const isAlreadyAdded = contactsName.includes(name);
-      // console.log(isAlreadyAdded);
+
       if (isAlreadyAdded) {
         window.alert(`${name} is already in contacts`);
         return;
@@ -59,33 +53,21 @@ const App = () => {
         name,
         number,
       };
+
       setContacts(prev => [...prev, contact]);
-      setContactsCopy(prev => [...prev, contact]);
-      // console.log(this.state.name);
     }
   };
 
   const filterContacts = evt => {
-    // debugger;
     const { value } = evt.target;
-    setContacts(
-      contactsCopy.filter(contact =>
-        contact.name.toLowerCase().includes(value.toLowerCase())
-      )
-    );
     setFilter(value);
   };
 
   const deleteContact = evt => {
-    // console.log(evt);
-    const { id } = evt.target.parentNode.parentNode;
-    // console.log(id);
-    // const {contacts} = this.state;
+    const id = evt.target.id;
     setContacts(prev => prev.filter(contact => contact.id !== id));
-    setContactsCopy(prev => prev.filter(contact => contact.id !== id));
   };
 
-  // console.log(contacts, filter);
   return (
     <div className={styles.container}>
       <div className={styles.contactBook}>
@@ -95,7 +77,11 @@ const App = () => {
         <Section title="Contacts">
           <div className={styles.contacts}>
             <Filter filter={filter} onChange={filterContacts} />
-            <ContactList contacts={contacts} onClick={deleteContact} />
+            <ContactList
+              filter={filter}
+              contacts={contacts}
+              onClick={deleteContact}
+            />
           </div>
         </Section>
       </div>

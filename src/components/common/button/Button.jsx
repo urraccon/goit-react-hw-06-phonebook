@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import styles from './Button.module.css';
 
-export const Button = ({ type = 'button', children, onClick }) => {
+export const Button = ({ type = 'button', children, onClick, id }) => {
   return (
-    <button className={styles.button} type={type} onClick={onClick}>
+    <button id={id} className={styles.button} type={type} onClick={onClick}>
       {children}
     </button>
   );
@@ -12,5 +12,5 @@ export const Button = ({ type = 'button', children, onClick }) => {
 Button.propTypes = {
   type: PropTypes.string,
   onClick: PropTypes.func,
-  className: PropTypes.string,
+  id: PropTypes.string,
 };

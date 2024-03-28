@@ -1,28 +1,43 @@
 import PropTypes from 'prop-types';
 import styles from './ContactList.module.css';
 import { Button } from 'components/common/button/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export const ContactList = ({ contacts, onClick }) => {
+export const ContactList = ({ contacts, onClick, filter }) => {
+  const [contactList, setContactList] = useState([]);
+
+  useEffect(() => {
+    if (contacts.length > 0) {
+      if (filter.length > 0) {
+        const filtredList = contacts.filter(contact =>
+          contact.name.toLowerCase().includes(filter.toLowerCase())
+        );
+        setContactList(filtredList);
+      } else {
+        setContactList(contacts);
+      }
+    }
+  }, [filter, contacts]);
+
   return (
     <div className={styles.container}>
       <ul className={styles.contactList}>
-        {contacts.map(contact => {
-          return (
-            <li key={contact.id} id={contact.id} className={styles.contact}>
-              <div className={styles.contactContainer}>
-                <span className={styles.id}>
-                  {`${contacts.indexOf(contact) + 1}.`}
-                  <span className={styles.name}>
-                    {`${contact.name}:`}
-                    <span className={styles.number}>{contact.number}</span>
-                  </span>
+        {contactList.map(contact => (
+          <li key={contact.id} className={styles.contact}>
+            <div className={styles.contactContainer}>
+              <span className={styles.id}>
+                {`${contactList.indexOf(contact) + 1}.`}
+                <span className={styles.name}>
+                  {`${contact.name}:`}
+                  <span className={styles.number}>{contact.number}</span>
                 </span>
-                <Button onClick={onClick}>Delete</Button>
-              </div>
-            </li>
-          );
-        })}
+              </span>
+              <Button id={contact.id} onClick={onClick}>
+                Delete
+              </Button>
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
   );
@@ -31,4 +46,5 @@ export const ContactList = ({ contacts, onClick }) => {
 ContactList.propTypes = {
   contacts: PropTypes.array,
   onClick: PropTypes.func,
+  filter: PropTypes.string,
 };
