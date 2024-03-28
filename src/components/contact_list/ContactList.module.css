@@ -1,18 +1,23 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .contactList {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
-}
-
-.contact {
-  margin-left: 3rem;
+  gap: 10px;
+  list-style: none;
+  align-items: baseline;
 }
 
 .name {
-  font-size: 1.1rem;
+  font-size: 20px;
+  font-weight: 300;
 }
 
 .container {
   display: flex;
-  gap: 1rem;
+  gap: 50px;
 }

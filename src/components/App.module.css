@@ -15,11 +15,11 @@
 .contactBook {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 30px;
 }
 
 .contacts {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 35px;
 }
