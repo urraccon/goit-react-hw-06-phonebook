@@ -1,22 +1,25 @@
-import PropTypes from 'prop-types';
 import styles from './ContactList.module.css';
 import { Button } from 'components/common/button/Button';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteContact } from 'components/redux/contactsSlice';
 
-export const ContactList = ({ contacts, onClick, filter }) => {
+export const ContactList = () => {
   const [contactList, setContactList] = useState([]);
 
+  const contacts = useSelector(state => state.contacts);
+  const filter = useSelector(state => state.contactsFilter);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (contacts.length > 0) {
-      if (filter.length > 0) {
-        const filtredList = contacts.filter(contact =>
-          contact.name.toLowerCase().includes(filter.toLowerCase())
-        );
-        setContactList(filtredList);
-      } else {
-        setContactList(contacts);
-      }
+    if (contacts.length > 0 && filter.length > 0) {
+      const filtredList = contacts.filter(contact =>
+        contact.name.toLowerCase().includes(filter.toLowerCase())
+      );
+      setContactList(filtredList);
+      return;
     }
+    setContactList(contacts);
   }, [filter, contacts]);
 
   return (
@@ -32,7 +35,7 @@ export const ContactList = ({ contacts, onClick, filter }) => {
                   <span className={styles.number}>{contact.number}</span>
                 </span>
               </span>
-              <Button id={contact.id} onClick={onClick}>
+              <Button onClick={() => dispatch(deleteContact(contact.id))}>
                 Delete
               </Button>
             </div>
@@ -41,10 +44,4 @@ export const ContactList = ({ contacts, onClick, filter }) => {
       </ul>
     </div>
   );
-};
-
-ContactList.propTypes = {
-  contacts: PropTypes.array,
-  onClick: PropTypes.func,
-  filter: PropTypes.string,
 };

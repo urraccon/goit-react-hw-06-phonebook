@@ -1,14 +1,19 @@
-import PropTypes from 'prop-types';
 import styles from './ContactForm.module.css';
 import { Button } from 'components/common/button/Button';
 import { Input } from 'components/common/input/Input';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { addContact } from 'components/redux/contactsSlice';
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
-  const handleChange = evt => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts);
+
+  const inputChange = evt => {
     const { value, name } = evt.target;
     switch (name) {
       case 'name':
@@ -18,27 +23,42 @@ const ContactForm = ({ onSubmit }) => {
         setNumber(value);
         break;
       default:
-        console.log('Option unavailable');
+        break;
     }
   };
 
-  const handleSubmit = evt => {
+  const formSubmit = evt => {
     evt.preventDefault();
+
+    if (number.length === 0 || name.length === 0) {
+      return;
+    }
+
+    if (contacts.length > 0) {
+      const [isAlreadyAdded] = contacts.map(contact =>
+        contact.name.includes(name)
+      );
+      if (isAlreadyAdded) {
+        Notify.failure(`${name} is already in contacts`);
+        return;
+      }
+    }
+
     const contact = {
       name,
       number,
     };
-    onSubmit(contact);
+    dispatch(addContact(contact));
     setName('');
     setNumber('');
   };
 
   return (
-    <form className={styles.contactForm} onSubmit={handleSubmit}>
+    <form className={styles.contactForm} onSubmit={formSubmit}>
       <div className={styles.inputs}>
         <Input
           labelName="Name"
-          onChange={handleChange}
+          onChange={inputChange}
           inputName="name"
           value={name}
           pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"
@@ -48,7 +68,7 @@ const ContactForm = ({ onSubmit }) => {
         />
         <Input
           labelName="Number"
-          onChange={handleChange}
+          onChange={inputChange}
           type="tel"
           inputName="number"
           value={number}
@@ -59,16 +79,10 @@ const ContactForm = ({ onSubmit }) => {
         />
       </div>
       <div className={styles.btnContainer}>
-        <Button type="submit" className={styles.button}>
-          Add contact
-        </Button>
+        <Button type="submit">Add contact</Button>
       </div>
     </form>
   );
-};
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func,
 };
 
 export default ContactForm;
