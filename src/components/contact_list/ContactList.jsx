@@ -7,9 +7,11 @@ import { deleteContact } from 'components/redux/contactsSlice';
 export const ContactList = () => {
   const [contactList, setContactList] = useState([]);
 
-  const contacts = useSelector(state => state.contacts);
+  const contacts = useSelector(state => state.contacts.list);
   const filter = useSelector(state => state.contactsFilter);
   const dispatch = useDispatch();
+
+  console.log('contact list is: ', contacts);
 
   useEffect(() => {
     if (contacts.length > 0 && filter.length > 0) {
@@ -19,6 +21,7 @@ export const ContactList = () => {
       setContactList(filtredList);
       return;
     }
+
     setContactList(contacts);
   }, [filter, contacts]);
 

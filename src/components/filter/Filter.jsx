@@ -7,6 +7,8 @@ export const Filter = () => {
   const term = useSelector(state => state.contactsFilter);
   const dispatch = useDispatch();
 
+  console.log('term is: ', term);
+
   return (
     <div className={styles.filter}>
       <Input

@@ -34,7 +34,7 @@ const ContactForm = () => {
       return;
     }
 
-    if (contacts.length > 0) {
+    if (contacts?.length > 0) {
       const [isAlreadyAdded] = contacts.map(contact =>
         contact.name.includes(name)
       );
